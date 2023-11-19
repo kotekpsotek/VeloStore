@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import BlackFridayImg from "../assets/black_week.webp"
+import { Badge, Card } from "flowbite-react";
 
 // Import Swiper styles
 import 'swiper/css';
@@ -12,13 +13,34 @@ import './MainPage.css';
 
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { green } from '@mui/material/colors';
-import { UseScrollTriggerOptions } from '@mui/material/useScrollTrigger/useScrollTrigger';
+
+const bestsellers = [
+  {
+    img: "https://sprint-rowery.pl/media/catalog/product/r/o/rower-crossowy-unibike-viper-2023_3__1.jpg",
+    name: "Unibike crossbike",
+    price: {
+      from: 980,
+      to: 880
+    }
+  },
+  {
+    img: "https://sprint-rowery.pl/media/catalog/product/r/o/rower-gravel-giant-revolt-2-2023-blue-01_3.jpg",
+    name: "Giant Revolt",
+    price: {
+      from: 1000,
+      to: 957,
+    }
+  }
+]
 
 function redirectTo(to: string) {
   return () => {
 
   }
+}
+
+function calculateDiscount({ from, to }: typeof bestsellers[0]["price"]) {
+  return Math.round(100 - (from/to) * 100) * -1;
 }
 
 export default function App() {
@@ -63,6 +85,30 @@ export default function App() {
             </div>
         </SwiperSlide>
       </Swiper>
+      <div  id="bestsellers" className="w-screen h-fit box-border p-2 flex flex-col">
+        <h3 className='font-bold text-xl p-2 text-black'>Bestsellers</h3>
+        <div className="w-fit h-full flex flex-wrap gap-4">
+          {bestsellers.map(bst => {
+            return (<Card
+              className="relative"
+              imgAlt="bike bestseller"
+            >
+              <div className='absolute p-2 w-full h-fit justify-start top-0 right-0 flex gap-x-2'>
+                <Badge color="pink">Bestseller</Badge>
+                <Badge color="success">-{calculateDiscount(bst.price)}%</Badge>
+              </div>
+              <div className="flex justify-center">
+                <img src={bst.img} alt="" loading='lazy' className='w-52 h-52 object-scale-down'/>
+              </div>
+              <p className='text-black font-semibold'>{bst.name}</p>
+              <div id="prices" className='text-black flex gap-2'>
+                <p id='actual'>{bst.price.to}&euro;</p>
+                <u id="past" className='line-through'>{bst.price.from}&euro;</u>
+              </div>
+            </Card>);
+          })}
+        </div>
+      </div>
     </>
   );
 }
