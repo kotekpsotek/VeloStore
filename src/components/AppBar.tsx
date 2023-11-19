@@ -13,6 +13,8 @@ import BarMenu from './MenuBar';
 import { useState } from 'react';
 import { Box, Button, Container, Link, Menu, MenuItem } from '@mui/material';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import type { SwapOptions } from '../states';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -56,24 +58,26 @@ color: 'inherit',
 },
 }));
 
-const swapOptions = [
+const swapOptions: SwapOptions[] = [
     "Products",
     "Black Week",
     "Sales"
 ]
 
-export default function AppBarCreate() {
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const [menuOpened, setOpen] = useState(false);
-    const handleClick = () => {
-        setOpen(!menuOpened);
+function swapToOption(option: SwapOptions, dsp: any) {
+    return () => {
+        console.log("products page should change to", option)
+        dsp({ type: option })
     }
-    
+}
+
+export default function AppBarCreate() {
+    const dispatcher = useDispatch();
     return (
         <AppBar position="static" style={{ backgroundColor: "rgb(75, 75, 75)" }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters style={{ position: "relative" }}>
-                <PedalBikeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                <PedalBikeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} onClick={_ => dispatcher({ type: null })}/>
                 <Typography
                     variant="h6"
                     noWrap
@@ -87,6 +91,7 @@ export default function AppBarCreate() {
                     color: 'inherit',
                     textDecoration: 'none',
                     }}
+                    onClick={_ => dispatcher({ type: null })}
                 >
                     KotekpsotekBikes
                 </Typography>
@@ -95,8 +100,8 @@ export default function AppBarCreate() {
                     <Link
                         key={page}
                         style={{ paddingRight: "15px" }}
-                        // onClick={handleCloseNavMenu}
                         sx={{ my: 2, color: 'white', display: 'block' }}
+                        onClick={swapToOption(page, dispatcher)}
                     >
                         {page}
                     </Link>

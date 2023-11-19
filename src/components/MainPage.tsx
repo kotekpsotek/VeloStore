@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useId } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import BlackFridayImg from "../assets/black_week.webp"
@@ -92,6 +92,7 @@ export default function App() {
             return (<Card
               className="relative"
               imgAlt="bike bestseller"
+              key={useId()}
             >
               <div className='absolute p-2 w-full h-fit justify-start top-0 right-0 flex gap-x-2'>
                 <Badge color="pink">Bestseller</Badge>
