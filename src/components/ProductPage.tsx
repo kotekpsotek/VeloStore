@@ -49,7 +49,6 @@ function UpperSidePersonalized({state}: {state: SwapOptions}) {
 }
 
 function pageMarkup(state: SwapOptions) {
-    const [loaded, setL] = useState(false);
     const [priceRangeValue, setPriceRange] = React.useState<number[]>([200, 57000]);
     
     const bikesCategories: { name: string, list: OneItem[] }[] = [
@@ -128,7 +127,6 @@ function pageMarkup(state: SwapOptions) {
                 }) satisfies React.ChangeEventHandler<HTMLInputElement>
             };
             
-            setL(true);
             return (
                 <>
                     <Accordion.Title>{filter.name}</Accordion.Title>
