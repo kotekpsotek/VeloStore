@@ -9,7 +9,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: rgb(215, 215, 215);
+  background-color: aliceblue/* rgb(215, 215, 215) */;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

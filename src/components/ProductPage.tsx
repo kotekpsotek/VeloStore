@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux/es/exports";
 import type { SwapOptions } from "../states";
-import { Card, Label, Radio, Accordion, Checkbox, RangeSlider, TextInput } from "flowbite-react";
+import { Card, Label, Radio, Accordion, Checkbox, RangeSlider, TextInput, Select } from "flowbite-react";
 import { useId, useState } from "react";
 import { Slider } from "@mui/material";
 import React from "react";
@@ -195,7 +195,16 @@ function pageMarkup(state: SwapOptions) {
                         <BikeCategoriesCover/>
                         <Filters/>
                     </div>
-                    <div className="items">
+                    <div className="items w-screen">
+                        <div className="flex justify-between p-2 items-center">
+                            <p className="font-semibold">We found (<span className="font-bold text-emerald-400">{4}</span>) products</p>
+                            <Select id="sort-by" placeholder="Sort by" required>
+                                <option>Popularity</option>
+                                <option>Most Viewed</option>
+                                <option>Price Ascending</option>
+                                <option>Price Descending</option>
+                            </Select>
+                        </div>
                     </div>
                 </div>
             </div>
