@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import AppBar from "./components/AppBar"
+import Page from './components/MainPage'
+import "./App.css"
 
 function App() {
 
   return <>
-    <div id="app">
-      <AppBar/>
-    </div>
+    <AppBar/>
+    <Page/>
   </>
   
 }
