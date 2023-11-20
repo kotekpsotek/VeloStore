@@ -2,7 +2,7 @@
 Shop where every velolover can buy his dreamed bike
 
 ## Preview
-<video src="./docs/KotekPsotek_Store.mp4" autoplay controls>
+![preview video](./docs/KotekPsotek_Store.mp4)
 
 ## Technological Chooses
 1. React - for firm and proficient experiences and working sign,
