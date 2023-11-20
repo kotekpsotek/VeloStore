@@ -33,3 +33,14 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.details-filter {
+  width: 100%;
+  border: solid 1px grey;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.details-filter > summary {
+  color: grey;
+}

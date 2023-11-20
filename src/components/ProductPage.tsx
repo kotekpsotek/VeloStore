@@ -182,7 +182,7 @@ function PageMarkup({state}: {state: SwapOptions}) {
             }
 
             return (
-                <details open={true}>
+                <details open={true} className="details-filter">
                     <summary>{filter.name}</summary>
                     <div>
                         {filter.options.map(opt => (
@@ -214,7 +214,7 @@ function PageMarkup({state}: {state: SwapOptions}) {
             }
             
             return (
-                <details open={true}>
+                <details open={true} className="details-filter">
                     <summary>Price</summary>
                     <div>
                         <div className="mb-2 block">
@@ -235,11 +235,9 @@ function PageMarkup({state}: {state: SwapOptions}) {
         return (
             <Card className="flex flex-col gap-y-1 w-56">
                 <h3 className="font-bold mb-2">Filters</h3>
-                <Accordion>
-                    <PickOption filter={{ name: "Brands", options: barnds, version: "multiple" }}/>
-                    <PickOption filter={{ name: "Gender", options: genders, version: "one" }}/>
-                    <Price/>
-                </Accordion>
+                <PickOption filter={{ name: "Brands", options: barnds, version: "multiple" }}/>
+                <PickOption filter={{ name: "Gender", options: genders, version: "one" }}/>
+                <Price/>
             </Card>
         )
     }
