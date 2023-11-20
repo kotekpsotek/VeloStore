@@ -4,6 +4,7 @@ import { Card, Label, Radio, Accordion, Checkbox, RangeSlider, TextInput, Select
 import { useEffect, useId, useReducer, useState } from "react";
 import { Slider } from "@mui/material";
 import React from "react";
+import BikeWidget, { BikeWidgetProps } from "./BikeWidget";
 
 function UpperSidePersonalized({state}: {state: SwapOptions}) {
     const versions = [
@@ -85,6 +86,57 @@ function PageMarkup({state}: {state: SwapOptions}) {
         {
             name: "Travel",
             list: []
+        }
+    ]
+
+    const bikesList: BikeWidgetProps[] = [
+        {
+            model: "normal",
+            name: "Giant TCR Advanced Pro 2 Disc",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/m/y/my22tcradvancedpro2disc_colorastarrynight_3.webp",
+            price: 4500
+        },
+        {
+            model: "normal",
+            name: "Giant TCR Advanced SL Disc 0 RED 2022",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-szosowy-giant-tcr-advanced-sl-disc-0-red-2022_1.webp",
+            price: 17_345
+        },
+        {
+            model: "normal",
+            name: "Giant Propel Advanced Pro 1",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-szosowy-giant-propel-advanced-pro-1-czarny-matowy-1_4.webp",
+            price: 8300
+        },
+        {
+            model: "normal",
+            name: "Trek Domane SL7 Disc 2023",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-szosowy-trek-domane-sl-7-etap-gen-4-2023-szary-01_1.webp",
+            price: 9229
+        },
+        {
+            model: "normal",
+            name: "Trek Madone SLR 6 AXS Gen 7",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-szosowy-trek-madone-slr-6-axs-gen-7-czarny-matowy-1_7.webp",
+            price: 22_000
+        },
+        {
+            model: "normal",
+            name: "Cannondale SuperSix EVO Hi-Mod 1",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-szosowy-cannondale-supersix-evo-hi-mod-1-czarno-srebrny_3.webp",
+            price: 45_000
+        },
+        {
+            model: "normal",
+            name: "Kross Vento DSC 5.0",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-szosowy-kross-vento-dsc-5-0-srebrny_1__2_1.webp",
+            price: 2000
+        },
+        {
+            model: "normal",
+            name: "Cannondale System Six Ultegra 2023",
+            img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-szosowy-cannondale-system-six-ultegra-2021-czerwony-01_3.webp",
+            price: 10497.58
         }
     ]
 
@@ -257,7 +309,7 @@ function PageMarkup({state}: {state: SwapOptions}) {
                     </div>
                     <div className="items w-screen">
                         <div  id="upper-stripe" className="flex justify-between p-2 items-center">
-                            <p className="font-semibold">We found (<span className="font-bold text-emerald-400">{4}</span>) products</p>
+                            <p className="font-semibold">We found (<span className="font-bold text-emerald-400">{8}</span>) products</p>
                             <Select id="sort-by" placeholder="Sort by" onChange={handleChangeSort} required>
                                 <option value="Random" selected>Random</option>
                                 <option value="Newest">Newest</option>
@@ -267,10 +319,12 @@ function PageMarkup({state}: {state: SwapOptions}) {
                                 <option value={"Price Descending"}>Price Descending</option>
                             </Select>
                         </div>
-                        <div className="grid grid-columns-4">
-                            <Card>
-
-                            </Card>
+                        <div className="grid grid-cols-4 grid-rows-4 gap-3">
+                            {bikesList.map(bike => {
+                                return (
+                                    <BikeWidget {...bike}/>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
