@@ -199,14 +199,18 @@ function PageMarkup({state}: {state: SwapOptions}) {
         }
 
         function Price() {
-            const handleChange = (prop: "from" | "to") => {
+            const handleChange = (tg: "from" | "to") => {
                 return (({ currentTarget: { value } }) => {
-                    switch(prop) {
+                    switch(tg) {
                         case "from":
-                            setPrice([Number(value), price[1]])
-                        break 
+                            setPrice([Number(value), price[1]]);
+                        break;
+
+                        case "to":
+                            setPrice([price[0], Number(value)]);
+                        break
                     }
-                }) satisfies React.ChangeEventHandler<HTMLInputElement>
+                }) satisfies React.FocusEventHandler<HTMLInputElement>
             }
             
             return (
@@ -216,13 +220,13 @@ function PageMarkup({state}: {state: SwapOptions}) {
                         <div className="mb-2 block">
                             <Label htmlFor="password2" value="From" />
                         </div>
-                        <TextInput id="price-from" type="number" min={price[0]} max={price[1]} onChange={handleChange("from")} required shadow/>
+                        <TextInput id="price-from" type="number" min={200} max={57000} defaultValue={price[0]} onBlur={handleChange("from")} required shadow/>
                     </div>                        
                     <div>
                         <div className="mb-2 block">
                             <Label htmlFor="password2" value="To" />
                         </div>
-                        <TextInput id="price-to" type="number" min={price[0]} max={price[1]} value={price[1]} required shadow/>
+                        <TextInput id="price-to" type="number" min={price[0]} max={price[1]} defaultValue={price[1]} onBlur={handleChange("to")} required shadow/>
                     </div>                        
                 </details>
             )
