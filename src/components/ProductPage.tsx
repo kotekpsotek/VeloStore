@@ -52,7 +52,8 @@ function PageMarkup({state}: {state: SwapOptions}) {
     const [price, setPrice] = useState([200, 57000]);
     const [categoriesBikes, setCategories] = useState<string[]>([])
     const [brands, setBrands] = useState<string[]>([]);
-    const [gender, setGender] = useState<"male" | "female">();
+    const [gender, setGender] = useState<"male" | "female" | false>(false);
+    console.log(gender)
 
     const bikesCategories: { name: string, list: OneItem[] }[] = [
         {
@@ -148,9 +149,9 @@ function PageMarkup({state}: {state: SwapOptions}) {
             };
 
             const handleClick: React.MouseEventHandler<HTMLInputElement> = ({ currentTarget }) => {
+                const dt = currentTarget.getAttribute("data-for")!;
                 switch(filter.name) {
                     case "Brands":
-                        const dt = currentTarget.getAttribute("data-for")!;
                         const checked = currentTarget.checked;
                         if (checked && !brands.includes(dt)) {
                             setBrands([...brands, dt]);
@@ -159,6 +160,14 @@ function PageMarkup({state}: {state: SwapOptions}) {
                             const sp = brands.splice(brands.findIndex(v => v == dt), 1);
                             setBrands([...brands])
                         }
+                    break;
+
+                    case "Gender":
+                        if (dt != gender) {
+                            setGender(dt as any);
+                        }
+                        else setGender(false)
+                    break;
                 }
             }
 
@@ -166,14 +175,16 @@ function PageMarkup({state}: {state: SwapOptions}) {
                 switch(filter.name) {
                     case "Brands":
                         return brands.includes(opt)
+
+                    case "Gender":
+                        return gender == opt
                 }
             }
 
             return (
-                <>
-
-                    <Accordion.Title>{filter.name}</Accordion.Title>
-                    <Accordion.Content>
+                <details open={true}>
+                    <summary>{filter.name}</summary>
+                    <div>
                         {filter.options.map(opt => (
                             <div className="flex items-center gap-2" key={useId()}>
                                 <Checkbox id="accept" name={filter.version == "multiple" ? opt : filter.name} data-for={opt} checked={isChecked(opt)} onChange={handleChangeForOnlyOne(opt)} onClick={handleClick}/>
@@ -182,8 +193,8 @@ function PageMarkup({state}: {state: SwapOptions}) {
                                 </Label>
                             </div>
                         ))}
-                    </Accordion.Content>
-                </>
+                    </div>
+                </details>
             )
         }
 
@@ -221,12 +232,8 @@ function PageMarkup({state}: {state: SwapOptions}) {
             <Card className="flex flex-col gap-y-1 w-56">
                 <h3 className="font-bold mb-2">Filters</h3>
                 <Accordion>
-                    <Accordion.Panel>
-                        <PickOption filter={{ name: "Brands", options: barnds, version: "multiple" }}/>
-                    </Accordion.Panel>
-                    <Accordion.Panel>
-                        <PickOption filter={{ name: "Gender", options: genders, version: "one" }}/>
-                    </Accordion.Panel>
+                    <PickOption filter={{ name: "Brands", options: barnds, version: "multiple" }}/>
+                    <PickOption filter={{ name: "Gender", options: genders, version: "one" }}/>
                     <Price/>
                 </Accordion>
             </Card>
