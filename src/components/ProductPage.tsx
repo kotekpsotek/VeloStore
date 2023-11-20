@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux/es/exports";
 import type { SwapOptions } from "../states";
 import { Card, Label, Radio, Accordion, Checkbox, RangeSlider, TextInput, Select } from "flowbite-react";
-import { useId, useReducer, useState } from "react";
+import { useEffect, useId, useReducer, useState } from "react";
 import { Slider } from "@mui/material";
 import React from "react";
 
@@ -49,10 +49,11 @@ function UpperSidePersonalized({state}: {state: SwapOptions}) {
 }
 
 function PageMarkup({state}: {state: SwapOptions}) {
-    const [priceRangeValue, setPriceRange] = React.useState<number[]>([200, 57000]);
+    const [price, setPrice] = useState([200, 57000]);
     const [categoriesBikes, setCategories] = useState<string[]>([])
-    console.log(categoriesBikes)
-    
+    const [brands, setBrands] = useState<string[]>([]);
+    const [gender, setGender] = useState<"male" | "female">();
+
     const bikesCategories: { name: string, list: OneItem[] }[] = [
         {
             name: "MTB",
@@ -125,17 +126,14 @@ function PageMarkup({state}: {state: SwapOptions}) {
             "Kross",
             "Romet"
         ];
-        const price = {
-            from: 200,
-            to: 56_000
-        }
         const genders = ["male", "female"];
         
         function PickOption({filter}: {filter:FilterMachUp}) {
             /** For only one option avaiable -> unselect other selected */
             const handleChangeForOnlyOne = function(involvedFor: string) {
                 return (({ currentTarget }) => {
-                    if (currentTarget.checked) {
+                    // Check only one functionality
+                    if (filter.version == "one" && currentTarget.checked) {
                         const othersList = currentTarget.parentElement?.parentElement;
                         for (const check of othersList?.children || []) {
                             const inputEl = check.querySelector("input:first-of-type")!;
@@ -148,7 +146,29 @@ function PageMarkup({state}: {state: SwapOptions}) {
                     }
                 }) satisfies React.ChangeEventHandler<HTMLInputElement>
             };
-            
+
+            const handleClick: React.MouseEventHandler<HTMLInputElement> = ({ currentTarget }) => {
+                switch(filter.name) {
+                    case "Brands":
+                        const dt = currentTarget.getAttribute("data-for")!;
+                        const checked = currentTarget.checked;
+                        if (checked && !brands.includes(dt)) {
+                            setBrands([...brands, dt]);
+                        }
+                        else if (!checked && brands.includes(dt)) {
+                            const sp = brands.splice(brands.findIndex(v => v == dt), 1);
+                            setBrands([...brands])
+                        }
+                }
+            }
+
+            const isChecked = (opt: string) => {
+                switch(filter.name) {
+                    case "Brands":
+                        return brands.includes(opt)
+                }
+            }
+
             return (
                 <>
 
@@ -156,7 +176,7 @@ function PageMarkup({state}: {state: SwapOptions}) {
                     <Accordion.Content>
                         {filter.options.map(opt => (
                             <div className="flex items-center gap-2" key={useId()}>
-                                <Checkbox id="accept" name={filter.version == "multiple" ? opt : filter.name} data-for={opt} onChange={filter.version == "one" ? handleChangeForOnlyOne(opt) : () => null}/>
+                                <Checkbox id="accept" name={filter.version == "multiple" ? opt : filter.name} data-for={opt} checked={isChecked(opt)} onChange={handleChangeForOnlyOne(opt)} onClick={handleClick}/>
                                 <Label htmlFor="accept" className="flex">
                                     {opt}
                                 </Label>
@@ -168,24 +188,32 @@ function PageMarkup({state}: {state: SwapOptions}) {
         }
 
         function Price() {
+            const handleChange = (prop: "from" | "to") => {
+                return (({ currentTarget: { value } }) => {
+                    switch(prop) {
+                        case "from":
+                            setPrice([Number(value), price[1]])
+                        break 
+                    }
+                }) satisfies React.ChangeEventHandler<HTMLInputElement>
+            }
+            
             return (
-                <>
-                    <Accordion.Title>Price</Accordion.Title>
-                    <Accordion.Content>
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="password2" value="From" />
-                            </div>
-                            <TextInput id="price-from" type="number" min={price.from} max={price.to} value={price.from} required shadow onChange={({ currentTarget: { value } }) => setPriceRange([Number(value), priceRangeValue[1]])}/>
-                        </div>                        
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="password2" value="To" />
-                            </div>
-                            <TextInput id="price-to" type="number" min={price.from} max={price.to} value={price.to} required shadow /* onChange={} *//>
-                        </div>                        
-                    </Accordion.Content>
-                </>
+                <details open={true}>
+                    <summary>Price</summary>
+                    <div>
+                        <div className="mb-2 block">
+                            <Label htmlFor="password2" value="From" />
+                        </div>
+                        <TextInput id="price-from" type="number" min={price[0]} max={price[1]} onChange={handleChange("from")} required shadow/>
+                    </div>                        
+                    <div>
+                        <div className="mb-2 block">
+                            <Label htmlFor="password2" value="To" />
+                        </div>
+                        <TextInput id="price-to" type="number" min={price[0]} max={price[1]} value={price[1]} required shadow/>
+                    </div>                        
+                </details>
             )
         }
 
@@ -199,9 +227,7 @@ function PageMarkup({state}: {state: SwapOptions}) {
                     <Accordion.Panel>
                         <PickOption filter={{ name: "Gender", options: genders, version: "one" }}/>
                     </Accordion.Panel>
-                    <Accordion.Panel>
-                        <Price/>
-                    </Accordion.Panel>
+                    <Price/>
                 </Accordion>
             </Card>
         )
