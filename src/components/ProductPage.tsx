@@ -53,7 +53,7 @@ function PageMarkup({state}: {state: SwapOptions}) {
     const [categoriesBikes, setCategories] = useState<string[]>([])
     const [brands, setBrands] = useState<string[]>([]);
     const [gender, setGender] = useState<"male" | "female" | false>(false);
-    console.log(gender)
+    const [sort, setSort] = useState<"Newset" | "Oldest" | "Most Viewed" | "Price Ascending" | "Price Descending" | "Random">("Random");
 
     const bikesCategories: { name: string, list: OneItem[] }[] = [
         {
@@ -242,6 +242,10 @@ function PageMarkup({state}: {state: SwapOptions}) {
         )
     }
     
+    const handleChangeSort: React.ChangeEventHandler<HTMLSelectElement> = ({ currentTarget: { value } }) => {
+        setSort(value as any);
+    }
+
     return (
         <>
             <div className="flex flex-col gap-y-2 w-screen h-screen p-8" style={{ backgroundColor: "aliceblue" }}>
@@ -254,11 +258,13 @@ function PageMarkup({state}: {state: SwapOptions}) {
                     <div className="items w-screen">
                         <div  id="upper-stripe" className="flex justify-between p-2 items-center">
                             <p className="font-semibold">We found (<span className="font-bold text-emerald-400">{4}</span>) products</p>
-                            <Select id="sort-by" placeholder="Sort by" required>
-                                <option>Popularity</option>
-                                <option>Most Viewed</option>
-                                <option>Price Ascending</option>
-                                <option>Price Descending</option>
+                            <Select id="sort-by" placeholder="Sort by" onChange={handleChangeSort} required>
+                                <option value="Random" selected>Random</option>
+                                <option value="Newest">Newest</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value={"Most Viewed"}>Most Viewed</option>
+                                <option value={"Price Ascending"}>Price Ascending</option>
+                                <option value={"Price Descending"}>Price Descending</option>
                             </Select>
                         </div>
                         <div className="grid grid-columns-4">
@@ -275,7 +281,6 @@ function PageMarkup({state}: {state: SwapOptions}) {
 
 export default function ProductsPage() {
     const selectedPage = useSelector<{ type: SwapOptions }, SwapOptions>(state => state.type);
-    console.log("New products page is", selectedPage)
     return (
         <>
             {selectedPage != null ? <PageMarkup state={selectedPage}/> : null};
