@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux/es/exports";
 import type { SwapOptions } from "../states";
 import { Card, Label, Radio, Accordion, Checkbox, RangeSlider, TextInput, Select } from "flowbite-react";
-import { useId, useState } from "react";
+import { useId, useReducer, useState } from "react";
 import { Slider } from "@mui/material";
 import React from "react";
 
@@ -48,13 +48,21 @@ function UpperSidePersonalized({state}: {state: SwapOptions}) {
     )
 }
 
-function pageMarkup(state: SwapOptions) {
+function PageMarkup({state}: {state: SwapOptions}) {
     const [priceRangeValue, setPriceRange] = React.useState<number[]>([200, 57000]);
+    const [categoriesBikes, setCategories] = useState<string[]>([])
+    console.log(categoriesBikes)
     
     const bikesCategories: { name: string, list: OneItem[] }[] = [
         {
             name: "MTB",
-            list: []
+            list: [
+                {
+                    img: "https://sprint-rowery.pl/media/catalog/product/cache/2cf98570d9f614fe7b8ae8291728e2d9/r/o/rower-gorski-marin-team-marin-1-czarny-1_1.webp",
+                    name: "Marin Team Marin 1",
+                    price: 990,
+                }
+            ]
         },
         {
             name: "Road",
@@ -79,12 +87,26 @@ function pageMarkup(state: SwapOptions) {
     ]
 
     function BikeCategoriesCover() {
+        const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ currentTarget: { value } }) => {
+            const find = categoriesBikes.findIndex(v => v == value);
+
+            if (find == -1) {
+                // When desn't exists
+                setCategories([...categoriesBikes, value])
+            }
+            else {
+                // When does
+                categoriesBikes.splice(find, 1);
+                setCategories([...categoriesBikes]);
+            }
+        } 
+        
         return (
             <Card className="flex flex-col gap-y-1 w-56">
                 <h3 className="font-bold mb-2">Categories</h3>
                 {bikesCategories.map(({ name }) => 
                     <div className="flex items-center gap-2" key={useId()}>
-                        <Radio id="united-state" name={name} value="USA" multiple/>
+                        <Checkbox id="united-state" name={name} value={name} checked={categoriesBikes.includes(name)} multiple onChange={handleChange}/>
                         <Label htmlFor="united-state" className="font-medium">{name}</Label>
                     </div>
                 )}
@@ -129,6 +151,7 @@ function pageMarkup(state: SwapOptions) {
             
             return (
                 <>
+
                     <Accordion.Title>{filter.name}</Accordion.Title>
                     <Accordion.Content>
                         {filter.options.map(opt => (
@@ -153,13 +176,13 @@ function pageMarkup(state: SwapOptions) {
                             <div className="mb-2 block">
                                 <Label htmlFor="password2" value="From" />
                             </div>
-                            <TextInput id="password2" type="number" min={price.from} max={price.to} value={price.from} required shadow />
+                            <TextInput id="price-from" type="number" min={price.from} max={price.to} value={price.from} required shadow onChange={({ currentTarget: { value } }) => setPriceRange([Number(value), priceRangeValue[1]])}/>
                         </div>                        
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="password2" value="To" />
                             </div>
-                            <TextInput id="password2" type="number" min={price.from} max={price.to} value={price.to} required shadow />
+                            <TextInput id="price-to" type="number" min={price.from} max={price.to} value={price.to} required shadow /* onChange={} *//>
                         </div>                        
                     </Accordion.Content>
                 </>
@@ -194,7 +217,7 @@ function pageMarkup(state: SwapOptions) {
                         <Filters/>
                     </div>
                     <div className="items w-screen">
-                        <div className="flex justify-between p-2 items-center">
+                        <div  id="upper-stripe" className="flex justify-between p-2 items-center">
                             <p className="font-semibold">We found (<span className="font-bold text-emerald-400">{4}</span>) products</p>
                             <Select id="sort-by" placeholder="Sort by" required>
                                 <option>Popularity</option>
@@ -202,6 +225,11 @@ function pageMarkup(state: SwapOptions) {
                                 <option>Price Ascending</option>
                                 <option>Price Descending</option>
                             </Select>
+                        </div>
+                        <div className="grid grid-columns-4">
+                            <Card>
+
+                            </Card>
                         </div>
                     </div>
                 </div>
@@ -215,7 +243,7 @@ export default function ProductsPage() {
     console.log("New products page is", selectedPage)
     return (
         <>
-            {selectedPage != null ? pageMarkup(selectedPage) : null};
+            {selectedPage != null ? <PageMarkup state={selectedPage}/> : null};
         </>
     )
 }

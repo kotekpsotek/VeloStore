@@ -6,7 +6,7 @@ type PriceDiscount = {
 interface OneItem {
     img: string,
     name: string,
-    spec: unknown,
+    spec?: unknown,
     price: PriceDiscount | number,
 }
 
@@ -15,3 +15,7 @@ interface FilterMachUp {
     options: string[],
     version: "one" | "multiple"
 }
+
+type SelectedBikeCategories = {
+    name: string
+}[];

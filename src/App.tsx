@@ -8,6 +8,7 @@ import { ReducerProducPagesAction } from './states'
 
 function App() {
   const pageState = useSelector<ReducerProducPagesAction, string | null>(c => c.type);
+  
   return <>
     <AppBar/>
     {!pageState ? <Page/> : <ProductsPage/>}
