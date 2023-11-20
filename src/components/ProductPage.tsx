@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux/es/exports";
 import type { SwapOptions } from "../states";
-import { Card, Label, Radio, Accordion, Checkbox, RangeSlider, TextInput, Select } from "flowbite-react";
-import { useEffect, useId, useReducer, useState } from "react";
+import { Card, Label, Checkbox, TextInput, Select, Pagination } from "flowbite-react";
+import { useEffect, useId, useReducer, useRef, useState } from "react";
 import { Slider } from "@mui/material";
 import React from "react";
 import BikeWidget, { BikeWidgetProps } from "./BikeWidget";
@@ -55,6 +55,8 @@ function PageMarkup({state}: {state: SwapOptions}) {
     const [brands, setBrands] = useState<string[]>([]);
     const [gender, setGender] = useState<"male" | "female" | false>(false);
     const [sort, setSort] = useState<"Newset" | "Oldest" | "Most Viewed" | "Price Ascending" | "Price Descending" | "Random">("Random");
+    const [page, changePage] = useState(1);
+    const pagesTotaly = 5;
 
     const bikesCategories: { name: string, list: OneItem[] }[] = [
         {
@@ -294,6 +296,20 @@ function PageMarkup({state}: {state: SwapOptions}) {
         )
     }
     
+    /** Pagination functionality */
+    function Pages() {
+        const handleChangePage = (pg: number) => changePage(pg);
+        
+        return (
+            <>
+                <div className="flex justify-center pb-5">
+                    <Pagination currentPage={page} totalPages={pagesTotaly} showIcons onPageChange={handleChangePage}/>
+                </div>
+            </>
+        )
+    }
+
+    /** handle change in sorting items */
     const handleChangeSort: React.ChangeEventHandler<HTMLSelectElement> = ({ currentTarget: { value } }) => {
         setSort(value as any);
     }
@@ -328,6 +344,7 @@ function PageMarkup({state}: {state: SwapOptions}) {
                         </div>
                     </div>
                 </div>
+                <Pages/>
             </div>
         </>
     )
