@@ -2,7 +2,7 @@
 Shop where every velolover can buy his dreamed bike
 
 ## Preview
-![preview video](https://youtu.be/TF8mp2OVNvI?feature=shared)
+[preview video](https://youtu.be/TF8mp2OVNvI?feature=shared)
 
 ## Technological Chooses
 1. React - for firm and proficient experiences and working sign,
